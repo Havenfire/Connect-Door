@@ -14,7 +14,7 @@ def initialize():
 
 
 def main_loop(board):
-    players = [Agent(CHAR_0), Agent(CHAR_1)]
+    players = [Agent(CHAR_0), Copycat(CHAR_1)]
     for i in range(SIZE_X * SIZE_Y):
         curr_player = players[i % len(players)]
         print(f'turn {i}, {curr_player}')
