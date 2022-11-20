@@ -2,6 +2,7 @@
 
 from agents import *
 from constants import *
+from utils import *
 
 
 def initialize():
@@ -10,10 +11,6 @@ def initialize():
         board.append([CHAR_EMPTY] * SIZE_X)
 
     return board
-
-
-def print_board(board):
-    print('\n'.join((' '.join(r) for r in board)))
 
 
 def main_loop(board):
@@ -29,6 +26,7 @@ def main_loop(board):
         print(f'placed at {y} {col}')
         print_board(board)
         print('')
+
 
 if __name__ == '__main__':
     board = initialize()
