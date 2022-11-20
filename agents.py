@@ -26,6 +26,14 @@ class Copycat(Agent):
         return super().take_turn(board)
 
 
+class Human(Agent):
+    def take_turn(self, board):
+        col = int(input(f'What column do you want to play [{self.char}] on? '))
+        while board[0][col] != CHAR_EMPTY:
+            col = int(input(f'Column {col} already full, please choose another: '))
+        return col
+
+
 class See3PO:
     def __init__(self, char):
         self.char = char
