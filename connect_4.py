@@ -25,6 +25,10 @@ def main_loop(board):
         board[y][col] = curr_player.char
         print(f'placed at {y} {col}')
         print_board(board)
+        winner = check_win(board)
+        if winner:
+            print(f'{winner} has won!')
+            break
         print('')
 
 
