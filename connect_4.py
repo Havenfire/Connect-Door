@@ -1,11 +1,8 @@
-import random
 
-## constants
-SIZE_X = 7
-SIZE_Y = 6
-CHAR_EMPTY = '_'
-CHAR_0 = 'O'
-CHAR_1 = 'X'
+
+from agents import *
+from constants import *
+
 
 def initialize():
     board = []
@@ -18,19 +15,6 @@ def initialize():
 def print_board(board):
     print('\n'.join((' '.join(r) for r in board)))
 
-
-class Agent:
-    def __init__(self, char):
-        self.char = char
-
-    def take_turn(self, board):
-        col = random.randrange(SIZE_X)
-        while board[0][col] != CHAR_EMPTY:
-            col = random.randrange(SIZE_X)
-        return col
-
-    def __repr__(self):
-        return f'Agent({self.char})'
 
 def main_loop(board):
     players = [Agent(CHAR_0), Agent(CHAR_1)]
