@@ -35,6 +35,12 @@ class Human(Agent):
         return col
 
 
+class Gamer(Agent):
+    def take_turn(self, board):
+        for i in range(1, SIZE_X):
+            board.place_piece(i, self.char)
+        return 0
+
 class See3PO(Agent):
     def take_turn(self, board):
         for col in range(SIZE_X):
@@ -43,6 +49,8 @@ class See3PO(Agent):
                     continue
                 t_board = board.copy()
                 t_board.place_piece(col, self.char)
+                t_board.print()
+
                 if(t_board.check_win() != None):
                     return col
         return super().take_turn(board)

@@ -92,7 +92,7 @@ def main_loop(board):
         curr_player = players[i % len(players)]
         print(f'Turn {i}, {curr_player}')
         col = curr_player.take_turn(board)
-        board.place_piece(curr_player.char)
+        board.place_piece(col, curr_player.char)
         print(f'Placed in column {col + 1}')
         board.print()
         winner = board.check_win()
