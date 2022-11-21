@@ -87,12 +87,12 @@ class Board:
 
 
 def main_loop(board):
-    players = [Agent(CHAR_0), Agent(CHAR_1)]
+    players = [Gamer(CHAR_0), Gamer(CHAR_1)]
     for i in range(SIZE_X * SIZE_Y):
         curr_player = players[i % len(players)]
         print(f'Turn {i}, {curr_player}')
         col = curr_player.take_turn(board)
-        board.place_piece(curr_player.char)
+        board.place_piece(col, curr_player.char)
         print(f'Placed in column {col + 1}')
         board.print()
         winner = board.check_win()

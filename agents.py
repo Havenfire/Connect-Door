@@ -34,6 +34,12 @@ class Human(Agent):
         return col
 
 
+class Gamer(Agent):
+    def take_turn(self, board):
+        for i in range(1, SIZE_X):
+            board.place_piece(i, self.char)
+        return 0
+
 class See3PO(Agent):
     def take_turn(self, board):
         for col in range[SIZE_X]:
