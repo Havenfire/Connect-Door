@@ -2,7 +2,6 @@ import random
 
 from constants import *
 from utils import *
-from connect_4 import *
 
 class Agent:
     def __init__(self, char):
@@ -67,7 +66,14 @@ class See3PO(Agent):
             if(board[0][col] == CHAR_EMPTY):
                 t_board = board.copy()
                 t_board.place_piece(col, self.char)
-                if(t_board.check_win() != None):
+                if t_board.check_win() != None:
+                    
+                    return col
+            if(board[0][col] == CHAR_EMPTY):
+                t_board = board.copy()
+                t_board.place_piece(col, CHAR_0)
+                if t_board.check_win() != None:
+                    
                     return col
         return super().take_turn(board)
     
