@@ -14,11 +14,13 @@ def initialize():
 
 
 def main_loop(board):
-    players = [Agent(CHAR_0), Agent(CHAR_1)]
+    players = [Agent(CHAR_0), Human(CHAR_1)]
     for i in range(SIZE_X * SIZE_Y):
         curr_player = players[i % len(players)]
         print(f'turn {i}, {curr_player}')
         col = curr_player.take_turn(board)
+        if board[0][col] != CHAR_EMPTY:
+            raise Exception(f'Column {col} is already full!')
         for y in range(SIZE_Y):
             if y >= SIZE_Y - 1 or board[y + 1][col] != CHAR_EMPTY:
                 break

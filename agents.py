@@ -14,7 +14,25 @@ class Agent:
         return col
 
     def __repr__(self):
-        return f'Agent({self.char})'
+        return f'{self.__class__.__name__}({self.char})'
+
+
+class Copycat(Agent):
+    def take_turn(self, board):
+        for x in range(SIZE_X):
+            for y in range(SIZE_Y - 1, 0, -1):
+                if board[y][x] not in [CHAR_EMPTY, self.char] and board[y - 1][x] == CHAR_EMPTY:
+                    return x
+        return super().take_turn(board)
+
+
+class Human(Agent):
+    def take_turn(self, board):
+        col = int(input(f'What column do you want to play [{self.char}] on? '))
+        while board[0][col] != CHAR_EMPTY:
+            col = int(input(f'Column {col} already full, please choose another: '))
+        return col
+
 
 class See3PO(Agent):
     def take_turn(self, board):
