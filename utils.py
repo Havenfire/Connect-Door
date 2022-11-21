@@ -17,8 +17,7 @@ def copy_board(board):
     return boardState
 
 def sim_move(board, col, pChar):
-    if board[0][col] != CHAR_EMPTY:
-            raise Exception(f'Column {col} is already full!')
+    
     for y in range(SIZE_Y):
         if y >= SIZE_Y - 1 or board[y + 1][col] != CHAR_EMPTY:
             break

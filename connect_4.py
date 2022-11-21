@@ -88,7 +88,7 @@ class Board:
 
 
 def main_loop(board):
-    players = [Agent(CHAR_0), HeuristicAgent(CHAR_1)]
+    players = [Agent(CHAR_0), See3PO(CHAR_1)]
     for i in range(SIZE_X * SIZE_Y):
         curr_player = players[i % len(players)]
         print(f'Turn {i}, {curr_player}')

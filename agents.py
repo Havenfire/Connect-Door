@@ -2,6 +2,7 @@ import random
 
 from constants import *
 from utils import *
+from connect_4 import *
 
 class Agent:
     def __init__(self, char):
@@ -48,7 +49,7 @@ class HeuristicAgent(Agent):
 
 class Human(Agent):
     def take_turn(self, board):
-        col = int(input(f'What column do you want to play [{self.char}] on? '))
+        col = int(input(f'What column do you want to play [{self.char}] on? ')) - 1
         while board[0][col] != CHAR_EMPTY:
             col = int(input(f'Column {col} already full, please choose another: '))
         return col
@@ -62,12 +63,13 @@ class Gamer(Agent):
 
 class See3PO(Agent):
     def take_turn(self, board):
-        for col in range[SIZE_X]:
-            if(board[0][col] != CHAR_EMPTY):
-                t_board = copy_board
-                if(check_win(sim_move(t_board, col, self.char)) != None):
+        for col in range(SIZE_X):
+            if(board[0][col] == CHAR_EMPTY):
+                t_board = board.copy()
+                t_board.place_piece(col, self.char)
+                if(t_board.check_win() != None):
                     return col
-        return super().take_turn(self, board)
+        return super().take_turn(board)
     
 
 
@@ -86,7 +88,7 @@ class CenterLover:
     def take_turn(self, board):
         prio = self.createPrio
 
-        for i in range[SIZE_X]:
+        for i in range(SIZE_X):
             board
             
 
