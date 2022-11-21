@@ -36,10 +36,10 @@ class Human(Agent):
 
 class See3PO(Agent):
     def take_turn(self, board):
-        
         for col in range[SIZE_X]:
             if(board[0][col] != CHAR_EMPTY):
-                if check_win != None:
+                t_board = copy_board
+                if(check_win(sim_move(t_board, col, self.char)) != None):
                     return col
         return super().take_turn(self, board)
     
