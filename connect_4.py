@@ -1,5 +1,5 @@
 import copy
-from functools import cached_property
+from functools import lru_cache
 
 from agents import *
 from constants import *
@@ -22,36 +22,15 @@ class Board:
         for _ in range(size_y):
             self._board.append([chars[0]] * size_x)
 
-    @cached_property
-    def win_lines(self):
-        lines = []
-        # column
-        for x in range(SIZE_X):
-            for y in range(SIZE_Y - FOUR + 1):
-                lines.append(tuple((x, y + i) for i in range(FOUR)))
-        # row
-        for x in range(SIZE_X - FOUR + 1):
-            for y in range(SIZE_Y):
-                lines.append(tuple((x + i, y) for i in range(FOUR)))
-        # diag SE
-        for x in range(SIZE_X - FOUR + 1):
-            for y in range(SIZE_Y - FOUR + 1):
-                lines.append(tuple((x + i, y + i) for i in range(FOUR)))
-        # diag SW
-        for x in range(FOUR - 1, SIZE_X):
-            for y in range(SIZE_Y - FOUR + 1):
-                lines.append(tuple((x - i, y + i) for i in range(FOUR)))
-        
-        return lines
 
     def get_wins(self):
         wins = []
-        for line in self.win_lines:
+        for line in win_lines():
             char = self[line[0][1]][line[0][0]]
             if char == CHAR_EMPTY:
                 continue
             same = True
-            for spot in line:
+            for spot in line[1:]:
                 if self[spot[1]][spot[0]] != char:
                     same = False
                     break
@@ -83,27 +62,30 @@ class Board:
         print('\n'.join((' '.join(r) for r in self._board)))
 
     def copy(self):
-        new_board = copy.deepcopy(self)
+        new_board = copy.copy(self)
+        new_board._board = [r[:] for r in new_board._board]
         return new_board
 
 
 def main_loop(board):
-    players = [Agent(CHAR_0), HeuristicAgent(CHAR_1)]
+    players = [See3PO(CHAR_0), HeuristicAgent(CHAR_1)]
+    if random.choice([True, False]):
+        players = players[::-1]
     for i in range(SIZE_X * SIZE_Y):
         curr_player = players[i % len(players)]
-        print(f'Turn {i}, {curr_player}')
+        # print(f'Turn {i}, {curr_player}')
         col = curr_player.take_turn(board)
         board.place_piece(col, curr_player.char)
-        print(f'Placed in column {col + 1}')
-        board.print()
+        # print(f'Placed in column {col + 1}')
+        # board.print()
         winner = board.check_win()
         if winner:
-            print(f'{winner} has won!')
-            break
-        print('')
+            # print(f'{winner} has won!')
+            return winner
+        # print('')
 
 
 if __name__ == '__main__':
     board = initialize()
-    print_board(board)
+    board.print()
     main_loop(board)

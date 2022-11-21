@@ -1,3 +1,4 @@
+from functools import cached_property, lru_cache
 import random
 import sys
 
@@ -35,3 +36,26 @@ def argmax(l):
             best_v = v
             best_i = [i]
     return random.choice(best_i)
+
+
+@lru_cache(maxsize=None)
+def win_lines():
+    lines = []
+    # column
+    for x in range(SIZE_X):
+        for y in range(SIZE_Y - FOUR + 1):
+            lines.append(tuple((x, y + i) for i in range(FOUR)))
+    # row
+    for x in range(SIZE_X - FOUR + 1):
+        for y in range(SIZE_Y):
+            lines.append(tuple((x + i, y) for i in range(FOUR)))
+    # diag SE
+    for x in range(SIZE_X - FOUR + 1):
+        for y in range(SIZE_Y - FOUR + 1):
+            lines.append(tuple((x + i, y + i) for i in range(FOUR)))
+    # diag SW
+    for x in range(FOUR - 1, SIZE_X):
+        for y in range(SIZE_Y - FOUR + 1):
+            lines.append(tuple((x - i, y + i) for i in range(FOUR)))
+    
+    return lines
