@@ -45,12 +45,8 @@ class See3PO(Agent):
     def take_turn(self, board):
         for col in range(SIZE_X):
             if(board[0][col] == CHAR_EMPTY):
-                if board[0][col] != CHAR_EMPTY:
-                    continue
                 t_board = board.copy()
                 t_board.place_piece(col, self.char)
-                t_board.print()
-
                 if(t_board.check_win() != None):
                     return col
         return super().take_turn(board)
