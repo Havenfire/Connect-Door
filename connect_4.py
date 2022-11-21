@@ -7,19 +7,20 @@ from utils import *
 
 
 def initialize():
-    board = Board(SIZE_X, SIZE_Y, CHAR_EMPTY)
+    board = Board(SIZE_X, SIZE_Y, [CHAR_EMPTY, CHAR_0, CHAR_1])
 
     return board
 
 
 class Board:
-    def __init__(self, size_x, size_y, fill):
+    def __init__(self, size_x, size_y, chars):
         self.size_x = size_x
         self.size_y = size_y
+        self.chars = chars
         
         self.board = []
         for _ in range(size_y):
-            self.board.append([fill] * size_x)
+            self.board.append([chars[0]] * size_x)
 
     @cached_property
     def win_lines(self):
@@ -63,6 +64,14 @@ class Board:
         wins = self.get_wins()
         return None if len(wins) == 0 else wins[0][0]
 
+    def place_piece(self, col, char):
+        if board[0][col] != CHAR_EMPTY:
+            raise Exception(f'Column {col} is already full!')
+        for y in range(SIZE_Y):
+            if y >= SIZE_Y - 1 or board[y + 1][col] != CHAR_EMPTY:
+                break
+        board[y][col] = char
+
 
     def __setitem__(self, index, value):
         self.board.__setitem__(index, value)
@@ -81,15 +90,10 @@ def main_loop(board):
     players = [Agent(CHAR_0), Agent(CHAR_1)]
     for i in range(SIZE_X * SIZE_Y):
         curr_player = players[i % len(players)]
-        print(f'turn {i}, {curr_player}')
+        print(f'Turn {i}, {curr_player}')
         col = curr_player.take_turn(board)
-        if board[0][col] != CHAR_EMPTY:
-            raise Exception(f'Column {col} is already full!')
-        for y in range(SIZE_Y):
-            if y >= SIZE_Y - 1 or board[y + 1][col] != CHAR_EMPTY:
-                break
-        board[y][col] = curr_player.char
-        print(f'placed at {y} {col}')
+        board.place_piece(curr_player.char)
+        print(f'Placed in column {col + 1}')
         board.print()
         winner = board.check_win()
         if winner:
