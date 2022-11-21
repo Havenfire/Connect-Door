@@ -42,9 +42,8 @@ class See3PO(Agent):
                 if board[0][col] != CHAR_EMPTY:
                     continue
                 t_board = board.copy()
-                sim_move(t_board)
+                t_board.place_piece(col, self.char)
                 if(t_board.check_win() != None):
-                    print("Seeing something")
                     return col
         return super().take_turn(board)
     
