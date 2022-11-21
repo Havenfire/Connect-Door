@@ -2,7 +2,6 @@ import random
 
 from constants import *
 from utils import *
-from connect_4 import *
 
 class Agent:
     def __init__(self, char):
@@ -33,18 +32,21 @@ class HeuristicAgent(Agent):
 
         scores = [0] * SIZE_X
         for i in range(SIZE_X):
+            if board[0][i] != CHAR_EMPTY:
+                scores[i] = -1000
+                continue
             my_board = board.copy()
             my_board.place_piece(i, self.char)
-            if my_board.check_win == self.char:
+            if my_board.check_win() == self.char:
                 scores[i] += 100
 
             for other_char in other_players:
                 other_board = board.copy()
                 other_board.place_piece(i, other_char)
-                if other_board.check_win == other_char:
+                if other_board.check_win() == other_char:
                     scores[i] += 50
 
-        return argmin(scores)
+        return argmax(scores)
 
 
 class Human(Agent):

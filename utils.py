@@ -1,3 +1,4 @@
+import random
 import sys
 
 from constants import *
@@ -24,11 +25,13 @@ def sim_move(board, col, pChar):
     board[y][col] = pChar
     return board
 
-def argmin(l):
-    best_i = -1
+def argmax(l):
+    best_i = [-1]
     best_v = -float('inf')
     for i, v in enumerate(l):
+        if v == best_v:
+            best_i.append(i)
         if v > best_v:
             best_v = v
-            best_i = i
-    return best_i
+            best_i = [i]
+    return random.choice(best_i)
