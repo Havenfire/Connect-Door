@@ -18,9 +18,9 @@ class Board:
         self.size_y = size_y
         self.chars = chars
         
-        self.board = []
+        self._board = []
         for _ in range(size_y):
-            self.board.append([chars[0]] * size_x)
+            self._board.append([chars[0]] * size_x)
 
     @cached_property
     def win_lines(self):
@@ -47,12 +47,12 @@ class Board:
     def get_wins(self):
         wins = []
         for line in self.win_lines:
-            char = board[line[0][1]][line[0][0]]
+            char = self[line[0][1]][line[0][0]]
             if char == CHAR_EMPTY:
                 continue
             same = True
             for spot in line:
-                if board[spot[1]][spot[0]] != char:
+                if self[spot[1]][spot[0]] != char:
                     same = False
                     break
             if same:
@@ -65,29 +65,30 @@ class Board:
         return None if len(wins) == 0 else wins[0][0]
 
     def place_piece(self, col, char):
-        if board[0][col] != CHAR_EMPTY:
+        if self[0][col] != CHAR_EMPTY:
             raise Exception(f'Column {col} is already full!')
         for y in range(SIZE_Y):
-            if y >= SIZE_Y - 1 or board[y + 1][col] != CHAR_EMPTY:
+            if y >= SIZE_Y - 1 or self[y + 1][col] != CHAR_EMPTY:
                 break
-        board[y][col] = char
+        self[y][col] = char
 
 
     def __setitem__(self, index, value):
-        self.board.__setitem__(index, value)
+        self._board.__setitem__(index, value)
 
     def __getitem__(self, index):
-        return self.board.__getitem__(index)
+        return self._board.__getitem__(index)
 
     def print(self):
-        print('\n'.join((' '.join(r) for r in self.board)))
+        print('\n'.join((' '.join(r) for r in self._board)))
 
     def copy(self):
-        return copy.deepcopy(self)
+        new_board = copy.deepcopy(self)
+        return new_board
 
 
 def main_loop(board):
-    players = [Gamer(CHAR_0), Gamer(CHAR_1)]
+    players = [Agent(CHAR_0), HeuristicAgent(CHAR_1)]
     for i in range(SIZE_X * SIZE_Y):
         curr_player = players[i % len(players)]
         print(f'Turn {i}, {curr_player}')
