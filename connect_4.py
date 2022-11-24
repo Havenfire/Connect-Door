@@ -50,6 +50,7 @@ class Board:
             if y >= SIZE_Y - 1 or self[y + 1][col] != CHAR_EMPTY:
                 break
         self[y][col] = char
+        return int(y), int(col)
 
 
     def __setitem__(self, index, value):
@@ -68,7 +69,7 @@ class Board:
 
 
 def main_loop(board):
-    players = [See3PO(CHAR_0), HeuristicAgent(CHAR_1)]
+    players = [SmortCenterLover(CHAR_0), HeuristicAgent(CHAR_1)]
     if random.choice([True, False]):
         players = players[::-1]
     for i in range(SIZE_X * SIZE_Y):

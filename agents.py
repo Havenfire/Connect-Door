@@ -90,25 +90,49 @@ class MidLover(Agent):
                 return col
 
 
-class CenterLover:
+class SmortCenterLover:
     def __init__(self, char):
         self.char = char
 
     def take_turn(self, board):
-        prio = self.createPrio
+        for col in range(SIZE_X):
+            if(board[0][col] == CHAR_EMPTY):
+                    t_board = board.copy()
+                    t_board.place_piece(col, self.char)
+                    if t_board.check_win() != None:
+                        return col
 
+            
+        for col in range(SIZE_X):
+            if(board[0][col] == CHAR_EMPTY):
+                t_board = board.copy()
+                t_board.place_piece(col, CHAR_0)
+                if t_board.check_win() != None:
+                    return col
+
+        priority = self.createPrio()
+        highestIndex = 0
         for i in range(SIZE_X):
-            board
+            if(board[0][i] == CHAR_EMPTY):
+                t_board = board.copy()
+                y, x = t_board.place_piece(i, self.char)
+
+                val = priority[x][y]
+                if val > highestIndex:
+                    highestIndex = x
+        return highestIndex
+
             
 
-    def createPrio():
-        prio = [SIZE_X][SIZE_Y]
+    def createPrio(self):
+       
         x_vals = [1, 2, 3, 4, 3, 2, 1]
         y_vals = [1, 2, 3, 3, 2, 1]
-
-        for i in range[0, SIZE_X]:
-            for j in range[0, SIZE_Y]:
-                prio[i][j] = x_vals[i] * y_vals[j]
+        prio = [[]]
+        for i in range(0, SIZE_X):
+            prio.append([])
+            for j in range(0, SIZE_Y):
+                prio[i].append(x_vals[i] * y_vals[j])
         return prio
 
 
