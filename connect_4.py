@@ -26,7 +26,7 @@ class Board:
 
 
     def update_win_cache(self, updated_spot):
-        for line in win_lines()[1][updated_spot[1]][updated_spot[0]]:
+        for line in win_lines_per_spot()[updated_spot[1]][updated_spot[0]]:
             char = self._board[line[0][1]][line[0][0]]
             if char == CHAR_EMPTY:
                 continue
@@ -51,6 +51,15 @@ class Board:
         self.update_win_cache((col, y))
         return int(y), int(col)
 
+    def heights(self):
+        h = [0] * SIZE_X
+        for x in range(SIZE_X):
+            for y in range(SIZE_Y):
+                if y >= SIZE_Y - 1 or self._board[y + 1][x] != CHAR_EMPTY:
+                    break
+            h[x] = y
+        return h
+
 
     def __setitem__(self, index, value):
         self._board.__setitem__(index, value)
@@ -70,7 +79,7 @@ class Board:
 
 
 def main_loop(board):
-    players = [SmortCenterLover(CHAR_0), HeuristicAgent(CHAR_1)]
+    players = [Agent(CHAR_0), HeuristicAgent(CHAR_1)]
     if random.choice([True, False]):
         players = players[::-1]
     for i in range(SIZE_X * SIZE_Y):

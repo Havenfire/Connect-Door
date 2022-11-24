@@ -28,23 +28,33 @@ class Copycat(Agent):
 
 class HeuristicAgent(Agent):
     def take_turn(self, board):
-        other_players = set(board.chars) - set(self.char)
+        other_players = set(board.chars) - set((self.char, CHAR_EMPTY))
+
+        heights = board.heights()
 
         scores = [0] * SIZE_X
         for i in range(SIZE_X):
             if board[0][i] != CHAR_EMPTY:
                 scores[i] = -1000
                 continue
+
+            w = win_lines_per_spot()
+            scores[i] += len(win_lines_per_spot()[heights[i]][i]) * 8
+            for y in range(max(0, heights[i] - 1), min(SIZE_Y, heights[i] + 2)):
+                for x in range(max(0, i - 1), min(SIZE_X, i + 2)):
+                    if board[y][x] == self.char:
+                        scores[i] += 40
+
             my_board = board.copy()
             my_board.place_piece(i, self.char)
             if my_board.check_win() == self.char:
-                scores[i] += 100
+                scores[i] += 1000
 
             for other_char in other_players:
                 other_board = board.copy()
                 other_board.place_piece(i, other_char)
                 if other_board.check_win() == other_char:
-                    scores[i] += 50
+                    scores[i] += 500
 
         return argmax(scores)
 

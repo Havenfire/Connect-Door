@@ -67,9 +67,12 @@ def win_lines():
             line = tuple({0 : x - i, 1 : y + i} for i in range(FOUR))
             lines.append(line)
 
+    return lines
+
+@lru_cache(maxsize=None)
+def win_lines_per_spot():
     lines_per_spot = {y : {x : [] for x in range(SIZE_X)} for y in range(SIZE_Y)}
-    for line in lines:
+    for line in win_lines():
         for spot in line:
             lines_per_spot[spot[1]][spot[0]].append(line)
-    
-    return lines, lines_per_spot
+    return lines_per_spot
