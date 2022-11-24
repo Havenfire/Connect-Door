@@ -5,7 +5,7 @@ FOUR = 4
 
 SHOULD_PRINT = True
 
-COLOR = True
+COLOR = SHOULD_PRINT and True
 if COLOR:
     CHAR_EMPTY = '\u001b[30;1m_\u001b[0m'
     CHAR_0 = '\u001b[31;1mO\u001b[0m'

@@ -175,10 +175,10 @@ class SmortCenterLover(Agent):
         x_vals = [1, 2, 3, 4, 3, 2, 1]
         y_vals = [1, 2, 3, 3, 2, 1]
         prio = [[]]
-        for i in range(0, SIZE_X):
+        for i in range(0, SIZE_Y):
             prio.append([])
-            for j in range(0, SIZE_Y):
-                prio[i].append(x_vals[i] * y_vals[j])
+            for j in range(0, SIZE_X):
+                prio[i].append(x_vals[j] * y_vals[i])
         return prio
 
 
