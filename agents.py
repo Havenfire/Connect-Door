@@ -13,6 +13,9 @@ class Agent:
             col = random.randrange(SIZE_X)
         return col
 
+    def other_chars(self, board):
+        return list(set(board.chars) - set((self.char, CHAR_EMPTY)))
+
     def __repr__(self):
         return f'{self.__class__.__name__}({self.char})'
 
@@ -28,7 +31,7 @@ class Copycat(Agent):
 
 class HeuristicAgent(Agent):
     def take_turn(self, board):
-        other_players = set(board.chars) - set((self.char, CHAR_EMPTY))
+        other_players = self.other_chars(board)
 
         heights = board.heights()
 
@@ -100,7 +103,7 @@ class MidLover(Agent):
                 return col
 
 
-class SmortCenterLover:
+class SmortCenterLover(Agent):
     def __init__(self, char):
         self.char = char
 
@@ -116,7 +119,7 @@ class SmortCenterLover:
         for col in range(SIZE_X):
             if(board[0][col] == CHAR_EMPTY):
                 t_board = board.copy()
-                t_board.place_piece(col, CHAR_0)
+                t_board.place_piece(col, self.other_chars(board)[0])
                 if t_board.check_win() != None:
                     return col
 
