@@ -52,7 +52,7 @@ class Board:
         return int(y), int(col)
 
     def heights(self):
-        h = [0] * SIZE_X
+        h = [-1] * SIZE_X
         for x in range(SIZE_X):
             for y in range(SIZE_Y):
                 if y >= SIZE_Y - 1 or self._board[y + 1][x] != CHAR_EMPTY:
@@ -79,7 +79,7 @@ class Board:
 
 
 def main_loop(board):
-    players = [SmortCenterLover(CHAR_0), HeuristicAgent(CHAR_1)]
+    players = [HeuristicAgent(CHAR_0), HeuristicAgent(CHAR_1)]
     if random.choice([True, False]):
         players = players[::-1]
     for i in range(SIZE_X * SIZE_Y):
