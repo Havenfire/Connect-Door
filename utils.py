@@ -18,6 +18,11 @@ def copy_board(board):
     boardState = board
     return boardState
 
+def print3f(*args, **kwargs):
+    if SHOULD_PRINT:
+        print(*args, **kwargs)
+
+
 def sim_move(board, col, pChar):
     
     for y in range(SIZE_Y):
@@ -44,18 +49,27 @@ def win_lines():
     # column
     for x in range(SIZE_X):
         for y in range(SIZE_Y - FOUR + 1):
-            lines.append(tuple((x, y + i) for i in range(FOUR)))
+            line = tuple({0 : x, 1 : y + i} for i in range(FOUR))
+            lines.append(line)
     # row
     for x in range(SIZE_X - FOUR + 1):
         for y in range(SIZE_Y):
-            lines.append(tuple((x + i, y) for i in range(FOUR)))
+            line = tuple({0 : x + i, 1 : y} for i in range(FOUR))
+            lines.append(line)
     # diag SE
     for x in range(SIZE_X - FOUR + 1):
         for y in range(SIZE_Y - FOUR + 1):
-            lines.append(tuple((x + i, y + i) for i in range(FOUR)))
+            line = tuple({0 : x + i, 1 : y + i} for i in range(FOUR))
+            lines.append(line)
     # diag SW
     for x in range(FOUR - 1, SIZE_X):
         for y in range(SIZE_Y - FOUR + 1):
-            lines.append(tuple((x - i, y + i) for i in range(FOUR)))
+            line = tuple({0 : x - i, 1 : y + i} for i in range(FOUR))
+            lines.append(line)
+
+    lines_per_spot = {y : {x : [] for x in range(SIZE_X)} for y in range(SIZE_Y)}
+    for line in lines:
+        for spot in line:
+            lines_per_spot[spot[1]][spot[0]].append(line)
     
-    return lines
+    return lines, lines_per_spot
