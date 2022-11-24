@@ -79,7 +79,7 @@ class Board:
 
 
 def main_loop(board):
-    players = [Human(CHAR_0), HeuristicAgent(CHAR_1)]
+    players = [Cheese(CHAR_0), HeuristicAgent(CHAR_1)]
     if random.choice([True, False]):
         players = players[::-1]
     for i in range(SIZE_X * SIZE_Y):

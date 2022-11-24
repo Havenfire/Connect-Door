@@ -94,7 +94,7 @@ class See3PO(Agent):
                     return col
             if(board[0][col] == CHAR_EMPTY):
                 t_board = board.copy()
-                t_board.place_piece(col, CHAR_0)
+                t_board.place_piece(col, self.other_chars(board)[0])
                 if t_board.check_win() != None:
                     
                     return col
@@ -169,10 +169,19 @@ class Cheese(See3PO):
 
     def take_turn(self, board):
         if(super().find_move(board) != -1):
-            return super().super().take_turn()
+            return super().take_turn(board)
 
 
-        if(board[6][4] == CHAR_EMPTY):
+        if(board[5][4] == CHAR_EMPTY):
             return 4
-        if(board[6][3] == CHAR_EMPTY and board[6][5] == CHAR_EMPTY):
-            return random.choice(3, 5)
+
+        if(board[5][4] == self.char):
+            if(board[5][3] == CHAR_EMPTY and board[5][5] == CHAR_EMPTY):
+                return 3
+            if(board[5][5] == CHAR_EMPTY and board[5][2] == CHAR_EMPTY):
+                if(board[5][1] == CHAR_EMPTY):
+                    return 2
+                if(board[5][6] == CHAR_EMPTY):
+                    return 5
+        
+        return super().take_turn(board)
