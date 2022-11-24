@@ -3,6 +3,8 @@ SIZE_X = 7 # must be >= 4
 SIZE_Y = 6 # must be >= 4
 FOUR = 4
 
+SHOULD_PRINT = True
+
 COLOR = True
 if COLOR:
     CHAR_EMPTY = '\u001b[30;1m_\u001b[0m'
