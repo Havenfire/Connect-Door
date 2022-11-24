@@ -65,6 +65,13 @@ class Gamer(Agent):
 
 class See3PO(Agent):
     def take_turn(self, board):
+
+        move = self.find_move(board)
+        if move == -1:
+            return super().take_turn(board)
+        return move
+    
+    def find_move(self, board):
         for col in range(SIZE_X):
             if(board[0][col] == CHAR_EMPTY):
                 t_board = board.copy()
@@ -78,8 +85,7 @@ class See3PO(Agent):
                 if t_board.check_win() != None:
                     
                     return col
-        return super().take_turn(board)
-    
+        return -1
 
 
 class MidLover(Agent):
@@ -90,7 +96,7 @@ class MidLover(Agent):
                 return col
 
 
-class SmortCenterLover:
+class SmortCenterLover(Agent):
     def __init__(self, char):
         self.char = char
 
@@ -111,16 +117,22 @@ class SmortCenterLover:
                     return col
 
         priority = self.createPrio()
-        highestIndex = 0
+        highestVal = 0
+        highestList = []
         for i in range(SIZE_X):
             if(board[0][i] == CHAR_EMPTY):
                 t_board = board.copy()
                 y, x = t_board.place_piece(i, self.char)
 
-                val = priority[x][y]
-                if val > highestIndex:
-                    highestIndex = x
-        return highestIndex
+                val = priority[y][x]
+                if val > highestVal:
+                    highestVal = val
+                    highestList.clear()
+                    highestList.append(x)
+                elif val == highestVal:
+                    highestList.append(x)
+                
+        return random.choice(highestList)
 
             
 
@@ -139,3 +151,15 @@ class SmortCenterLover:
 
     def __repr__(self):
         return f'Agent({self.char})'
+
+class Cheese(See3PO):
+
+    def take_turn(self, board):
+        if(super().find_move(board) != -1):
+            return super().super().take_turn()
+
+
+        if(board[6][4] == CHAR_EMPTY):
+            return 4
+        if(board[6][3] == CHAR_EMPTY and board[6][5] == CHAR_EMPTY):
+            return random.choice(3, 5)
