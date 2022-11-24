@@ -54,6 +54,11 @@ class HeuristicAgent(Agent):
                 scores[i] += 1000
 
             for other_char in other_players:
+                my_other_board = my_board.copy()
+                my_other_board.place_piece(i, other_char)
+                if my_other_board.check_win() == other_char:
+                    scores[i] -= 500
+
                 other_board = board.copy()
                 other_board.place_piece(i, other_char)
                 if other_board.check_win() == other_char:
