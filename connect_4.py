@@ -52,7 +52,7 @@ class Board:
         return int(y), int(col)
 
     def heights(self):
-        h = [0] * SIZE_X
+        h = [-1] * SIZE_X
         for x in range(SIZE_X):
             for y in range(SIZE_Y):
                 if y >= SIZE_Y - 1 or self._board[y + 1][x] != CHAR_EMPTY:

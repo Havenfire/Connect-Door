@@ -38,22 +38,43 @@ class HeuristicAgent(Agent):
         scores = [0] * SIZE_X
         for i in range(SIZE_X):
             if board[0][i] != CHAR_EMPTY:
-                scores[i] = -1000
+                scores[i] = float('-inf')
                 continue
 
-            w = win_lines_per_spot()
-            scores[i] += len(win_lines_per_spot()[heights[i]][i]) * 8
+            wls = win_lines_per_spot()[heights[i]][i]
+
+            # add score for adjacent friendly pieces
+            scores[i] += len(wls) * 8
             for y in range(max(0, heights[i] - 1), min(SIZE_Y, heights[i] + 2)):
                 for x in range(max(0, i - 1), min(SIZE_X, i + 2)):
                     if board[y][x] == self.char:
                         scores[i] += 40
 
+            # add score for direct wins
             my_board = board.copy()
             my_board.place_piece(i, self.char)
             if my_board.check_win() == self.char:
-                scores[i] += 1000
+                scores[i] += 100000
 
-            for other_char in other_players:
+            for other_char in other_players + [self.char]:
+                # add score for blocking enemy triples
+                triple_setup = [CHAR_EMPTY, other_char, other_char, CHAR_EMPTY]
+                for line in wls:
+                    matching = True
+                    for j, spot in enumerate(line):
+                        if board[spot[1]][spot[0]] != triple_setup[j]:
+                            matching = False
+                    if matching:
+                        scores[i] += 200
+
+                if heights[i] > 0:
+                    # remove score for setting up enemy wins
+                    my_other_board = my_board.copy()
+                    my_other_board.place_piece(i, other_char)
+                    if my_other_board.check_win() == other_char:
+                        scores[i] -= 500
+
+                # add score for blocking enemy wins
                 other_board = board.copy()
                 other_board.place_piece(i, other_char)
                 if other_board.check_win() == other_char:
@@ -154,10 +175,10 @@ class SmortCenterLover(Agent):
         x_vals = [1, 2, 3, 4, 3, 2, 1]
         y_vals = [1, 2, 3, 3, 2, 1]
         prio = [[]]
-        for i in range(0, SIZE_X):
+        for i in range(0, SIZE_Y):
             prio.append([])
-            for j in range(0, SIZE_Y):
-                prio[i].append(x_vals[i] * y_vals[j])
+            for j in range(0, SIZE_X):
+                prio[i].append(x_vals[j] * y_vals[i])
         return prio
 
 
