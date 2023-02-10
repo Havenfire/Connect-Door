@@ -1,3 +1,4 @@
+import math
 import random
 
 from constants import *
@@ -206,3 +207,61 @@ class Cheese(See3PO):
                     return 5
         
         return super().take_turn(board)
+
+
+class TreeAgent(Agent):
+    def __init__(self, char, max_depth=6):
+        super().__init__(char)
+        self.max_depth = max_depth
+
+    def take_turn(self, board):
+        tree_root = {'score': None, 'who': self.char, 'children': [None] * 7}
+        options = [-float('inf')] * board.size_x
+        for x in range(board.size_x):
+            if board[0][x] != CHAR_EMPTY:
+                continue
+            new_board = board.copy()
+            new_board.place_piece(x, self.char)
+            options[x] = self.eval_state(new_board, self.other_chars(board)[0], 1, False, tree_root, x)
+        return argmax(options)
+
+    def eval_state(self, board, other_char, depth, my_turn, node, lx):
+        node['children'][lx] = {'score': None, 'who': self.char if my_turn else other_char, 'children': [None] * 7}
+        win = board.check_win()
+        if win:
+            node['children'][lx]['score'] = 1 if win == self.char else -1
+            return 1 if win == self.char else -1
+
+        if depth == self.max_depth:
+            score = 0
+            # heights = board.heights()
+            # for x in range(board.size_x):
+            #     for h in range(heights[x], heights[x] + 1):
+            #         if h <= 0:
+            #             continue
+            #         y = board.size_y - h
+            #         for d in [(-1, 0), (1, 0), (-1, 1), (0, 1), (1, 1)]:
+            #             nx = x + d[0]
+            #             ny = y + d[1]
+            #             if nx < 0 or nx >= board.size_x or ny >= board.size_y:
+            #                 continue
+            #             if board[y][x] == board[ny][nx]:
+            #                 score += 1 if board[y][x] == self.char else -1
+            # node['children'][lx]['score'] = math.tanh(score / 10)
+            score = board.score if self.char == board.chars[1] else -board.score
+            return math.tanh(score / 20)
+
+        best_fn = max if my_turn else min
+        best_score = -best_fn(-float('inf'), float('inf'))
+        for x in range(board.size_x):
+            if board[0][x] != CHAR_EMPTY:
+                continue
+            new_board = board.copy()
+            new_board.place_piece(x, self.char if my_turn else other_char)
+            score = self.eval_state(new_board, other_char, depth + 1, not my_turn, node['children'][lx], x)
+            best_score = best_fn(best_score, score)
+            if (my_turn and best_score >= 1) or (not my_turn and best_score <= -1):
+                node['children'][lx]['score'] = best_score
+                return best_score
+            node['children'][lx]['score'] = best_score
+        return best_score

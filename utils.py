@@ -42,6 +42,15 @@ def argmax(l):
             best_i = [i]
     return random.choice(best_i)
 
+def calc_line_score(counts):
+    if counts[1] > 0 and counts[2] > 0:
+        return 0
+    elif counts[1] > 0:
+        return 3**(counts[1] - 1)
+    elif counts[2] > 0:
+        return -(3**(counts[2] - 1))
+    else:
+        return 0
 
 @lru_cache(maxsize=None)
 def win_lines():

@@ -23,10 +23,22 @@ class Board:
             self._board.append([chars[0]] * size_x)
 
         self.wins = []
+        self.score = 0
 
 
-    def update_win_cache(self, updated_spot):
+    def update_win_cache(self, updated_spot, p=False):
         for line in win_lines_per_spot()[updated_spot[1]][updated_spot[0]]:
+            p_c = self._board[updated_spot[1]][updated_spot[0]]
+            counts = {c : 0 for c in self.chars}
+            for s in line:
+                counts[self._board[s[1]][s[0]]] += 1
+            counts_l = [counts[c] for c in self.chars]
+            new_score = calc_line_score(counts_l)
+            counts[p_c] -= 1
+            counts_l = [counts[c] for c in self.chars]
+            score_delta = new_score - calc_line_score(counts_l)
+            self.score += score_delta
+
             char = self._board[line[0][1]][line[0][0]]
             if char == CHAR_EMPTY:
                 continue
@@ -79,7 +91,7 @@ class Board:
 
 
 def main_loop(board):
-    players = [Human(CHAR_0), HeuristicAgent(CHAR_1)]
+    players = [TreeAgent(CHAR_0), Human(CHAR_1)]
     if random.choice([True, False]):
         players = players[::-1]
     for i in range(SIZE_X * SIZE_Y):
@@ -88,6 +100,7 @@ def main_loop(board):
         col = curr_player.take_turn(board)
         board.place_piece(col, curr_player.char)
         print3f(f'Placed in column {col + 1}')
+        # print3f(f'eval: {board.score}')
         board.print()
         winner = board.check_win()
         if winner:
