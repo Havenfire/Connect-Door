@@ -233,21 +233,6 @@ class TreeAgent(Agent):
             return 1 if win == self.char else -1
 
         if depth == self.max_depth:
-            score = 0
-            # heights = board.heights()
-            # for x in range(board.size_x):
-            #     for h in range(heights[x], heights[x] + 1):
-            #         if h <= 0:
-            #             continue
-            #         y = board.size_y - h
-            #         for d in [(-1, 0), (1, 0), (-1, 1), (0, 1), (1, 1)]:
-            #             nx = x + d[0]
-            #             ny = y + d[1]
-            #             if nx < 0 or nx >= board.size_x or ny >= board.size_y:
-            #                 continue
-            #             if board[y][x] == board[ny][nx]:
-            #                 score += 1 if board[y][x] == self.char else -1
-            # node['children'][lx]['score'] = math.tanh(score / 10)
             score = board.score if self.char == board.chars[1] else -board.score
             return math.tanh(score / 20)
 
